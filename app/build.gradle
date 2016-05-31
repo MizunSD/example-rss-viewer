@@ -19,8 +19,16 @@ android {
     }
 }
 
+ext.retrofitVersion="2.0.0"
+
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:23.4.0'
+
+    compile "com.squareup.retrofit2:retrofit:$retrofitVersion"
+    compile "com.squareup.retrofit2:converter-simplexml:$retrofitVersion"
+
+    compile 'com.j256.ormlite:ormlite-core:4.48'
+    compile 'joda-time:joda-time:2.9.4'
 }
