@@ -21,17 +21,17 @@ public enum  NewsSource {
     }
 
     @NonNull
-    public String getmName() {
+    public String getName() {
         return mName;
     }
 
     @NonNull
-    public String getmUrl() {
+    public String getUrl() {
         return mUrl;
     }
 
     @NonNull
-    public String getmPath() {
+    public String getPath() {
         return mPath;
     }
 }

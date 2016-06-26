@@ -20,13 +20,18 @@ import ru.teaz.examplerssviewer.model.utils.DateUtils;
 @DatabaseTable(tableName = "news")
 public class News {
 
+    public static final String FIELD_DATE = "date";
+    public static final String FIELD_READ = "read";
+    public static final String FIELD_FAVORITE = "favorite";
+    public static final String FIELD_TITLE = "title";
+
     @DatabaseField(columnName = "_id", id = true)
     private int mId;
 
     @DatabaseField(columnName = "source")
     private NewsSource mSource;
 
-    @DatabaseField(columnName = "title")
+    @DatabaseField(columnName = FIELD_TITLE)
     private String mTitle;
 
     @DatabaseField(columnName = "link")
@@ -35,7 +40,7 @@ public class News {
     @DatabaseField(columnName = "description")
     private String mDescription;
 
-    @DatabaseField(columnName = "pubDate", persisterClass = LocalDateTimePersister.class)
+    @DatabaseField(columnName = FIELD_DATE, persisterClass = LocalDateTimePersister.class)
     private LocalDateTime mPubDate;
 
     @DatabaseField(columnName = "category")
@@ -46,6 +51,12 @@ public class News {
 
     @DatabaseField(columnName = "url_image")
     private String mUrlImage;
+
+    @DatabaseField(columnName = FIELD_READ)
+    private boolean mRead = false;
+
+    @DatabaseField(columnName = FIELD_FAVORITE)
+    private boolean mFavorite = false;
 
     public News() {
 
@@ -136,5 +147,21 @@ public class News {
 
     public void setUrlImage(String urlImage) {
         this.mUrlImage = urlImage;
+    }
+
+    public boolean isRead() {
+        return mRead;
+    }
+
+    public void setRead(boolean read) {
+        mRead = read;
+    }
+
+    public boolean isFavorite() {
+        return mFavorite;
+    }
+
+    public void setFavorite(boolean favorite) {
+        mFavorite = favorite;
     }
 }
