@@ -5,6 +5,7 @@ import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.util.SortedList;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -15,30 +16,65 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import ru.teaz.examplerssviewer.R;
-import ru.teaz.examplerssviewer.model.db.News;
-import ru.teaz.examplerssviewer.model.utils.NewsUtils;
+import ru.teaz.examplerssviewer.data.db.model.News;
+import ru.teaz.examplerssviewer.data.utils.PreferencesUtils;
 
-/**
- * Created by Teaz on 25.06.2016.
- */
 public class NewsListRecyclerViewAdapter extends RecyclerView.Adapter<NewsListRecyclerViewAdapter.ViewHolder> {
 
     private Context mContext;
-    private List<News> mNewsList = new ArrayList<>();
+//    private List<News> mNewsList = new ArrayList<>();
+    private SortedList<News> mNewsList;
     private OnNewsClickListener mListener;
+    PreferencesUtils mPreferencesUtils;
 
     public interface OnNewsClickListener {
         void onNewsClick(News news);
     }
 
     public NewsListRecyclerViewAdapter(@NonNull Context context) {
-        mContext  = context;
+        mPreferencesUtils = new PreferencesUtils(context);
+        mContext = context;
+        mNewsList = new SortedList<>(News.class, new SortedList.Callback<News>() {
+            @Override
+            public int compare(News o1, News o2) {
+                return o2.getPubDate().compareTo(o1.getPubDate());
+            }
+
+            @Override
+            public void onInserted(int position, int count) {
+                notifyItemRangeInserted(position, count);
+            }
+
+            @Override
+            public void onRemoved(int position, int count) {
+                notifyItemRangeRemoved(position, count);
+            }
+
+            @Override
+            public void onMoved(int fromPosition, int toPosition) {
+                notifyItemMoved(fromPosition, toPosition);
+            }
+
+            @Override
+            public void onChanged(int position, int count) {
+                notifyItemRangeChanged(position, count);
+            }
+
+            @Override
+            public boolean areContentsTheSame(News oldItem, News newItem) {
+                return oldItem.getLink().equals(newItem.getLink());
+            }
+
+            @Override
+            public boolean areItemsTheSame(News item1, News item2) {
+                return item1.getId() == item2.getId();
+            }
+        });
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -58,23 +94,13 @@ public class NewsListRecyclerViewAdapter extends RecyclerView.Adapter<NewsListRe
     }
 
     public void addData(@NonNull List<News> newsList) {
-        if (mNewsList.isEmpty()) {
-            mNewsList.addAll(newsList);
-        } else {
-            final News lastNews = mNewsList.get(0);
-            newsList = NewsUtils.filterByDate(newsList, lastNews.getPubDate());
-            for(News news: newsList) {
-                if (!lastNews.equals(news)) {
-                    mNewsList.add(0, news);
-                }
-            }
-        }
+        mNewsList.addAll(newsList);
         notifyDataSetChanged();
     }
 
     public void markAllRead() {
-        for(News news: mNewsList) {
-            news.setRead(true);
+        for (int i = 0; i < mNewsList.size(); i++) {
+            mNewsList.get(i).setRead(true);
         }
         notifyDataSetChanged();
     }

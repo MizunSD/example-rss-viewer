@@ -4,10 +4,8 @@ import android.app.Activity;
 
 import dagger.Module;
 import dagger.Provides;
+import ru.teaz.examplerssviewer.di.CustomScope;
 
-/**
- * Created by Teaz on 19.06.2016.
- */
 @Module
 public class ActivityModule {
 
@@ -18,6 +16,7 @@ public class ActivityModule {
     }
 
     @Provides
+    @CustomScope
     Activity activity() {
         return mActivity;
     }

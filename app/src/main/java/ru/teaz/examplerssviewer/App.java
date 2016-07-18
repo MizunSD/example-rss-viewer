@@ -6,9 +6,6 @@ import ru.teaz.examplerssviewer.di.component.AppComponent;
 import ru.teaz.examplerssviewer.di.component.DaggerAppComponent;
 import ru.teaz.examplerssviewer.di.module.AppModule;
 
-/**
- * Created by Teaz on 19.06.2016.
- */
 public class App extends Application {
 
     private AppComponent mAppComponent;

@@ -2,14 +2,15 @@ package ru.teaz.examplerssviewer.ui.activity;
 
 import android.os.Bundle;
 import android.support.annotation.StringRes;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.View;
 import android.widget.LinearLayout;
 
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
+import com.mikepenz.materialdrawer.holder.StringHolder;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
@@ -24,9 +25,10 @@ import ru.teaz.examplerssviewer.di.component.NewsComponent;
 import ru.teaz.examplerssviewer.domain.bus.RxBus;
 import ru.teaz.examplerssviewer.domain.bus.event.FavoriteNewsCountUpdateEvent;
 import ru.teaz.examplerssviewer.domain.bus.event.UnreadNewsCountUpdateEvent;
-import ru.teaz.examplerssviewer.model.Filter;
+import ru.teaz.examplerssviewer.data.Filter;
 import ru.teaz.examplerssviewer.presenter.impl.MainActivityPresenterImpl;
 import ru.teaz.examplerssviewer.ui.callback.RssFeedView;
+import ru.teaz.examplerssviewer.ui.fragment.NewsItemFragment;
 import ru.teaz.examplerssviewer.ui.fragment.NewsListFragment;
 import rx.Subscription;
 import rx.functions.Action1;
@@ -96,12 +98,6 @@ public class MainActivity extends BaseActivity implements HasComponent<NewsCompo
         ButterKnife.reset(this);
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.rss_feed_menu, menu);
-        return true;
-    }
-
     private void initInjector() {
         mNewsComponent = DaggerNewsComponent.builder()
                 .appComponent(getAppComponent())
@@ -152,31 +148,40 @@ public class MainActivity extends BaseActivity implements HasComponent<NewsCompo
 
     @Override
     public void showItem(int id) {
-
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.news_list_container, NewsItemFragment.newInstance(id))
+                .addToBackStack(null)
+                .commit();
     }
 
     @Override
     public void showError(@StringRes int resId) {
-
+        Snackbar.make(lvRoot, resId, Snackbar.LENGTH_LONG).show();
     }
 
     @Override
     public void updateUnreadCount(int count) {
+        final StringHolder badgeCount = count == 0 ? null :
+                new StringHolder(String.valueOf(count));
 
+        mDrawer.updateBadge(Filter.UNREAD.ordinal(), badgeCount);
     }
 
     @Override
     public void updateFavoriteCount(int count) {
+        final StringHolder badgeCount = count == 0 ? null :
+                new StringHolder(String.valueOf(count));
 
+        mDrawer.updateBadge(Filter.FAVORITES.ordinal(), badgeCount);
     }
 
     @Override
     public void onNewsClick(int newsId) {
-
+        presenter.loadNewsItem(newsId);
     }
 
     private void initToolbar() {
-        toolbar.setTitle("");
+        toolbar.setTitle(R.string.app_name);
         setSupportActionBar(toolbar);
     }
 
@@ -186,9 +191,9 @@ public class MainActivity extends BaseActivity implements HasComponent<NewsCompo
                 .withHeader(R.layout.nav_header)
                 .withToolbar(toolbar)
                 .addDrawerItems(
-                        new PrimaryDrawerItem().withIcon(R.drawable.ic_newspaper_grey600_24dp).withName(R.string.all_news).withIdentifier(R.string.all_news).withTag(Filter.ALL_NEWS),
-                        new PrimaryDrawerItem().withIcon(R.drawable.ic_email_outline_grey600_24dp).withName(R.string.unread).withIdentifier(R.string.unread).withTag(Filter.UNREAD),
-                        new PrimaryDrawerItem().withIcon(R.drawable.ic_heart_outline_grey600_24dp).withName(R.string.favorites).withIdentifier(R.string.favorites).withTag(Filter.FAVORITES)
+                        new PrimaryDrawerItem().withIcon(R.drawable.ic_newspaper_grey600_24dp).withName(R.string.all_news).withIdentifier(Filter.ALL_NEWS.ordinal()).withTag(Filter.ALL_NEWS),
+                        new PrimaryDrawerItem().withIcon(R.drawable.ic_email_outline_grey600_24dp).withName(R.string.unread).withIdentifier(Filter.UNREAD.ordinal()).withTag(Filter.UNREAD),
+                        new PrimaryDrawerItem().withIcon(R.drawable.ic_heart_outline_grey600_24dp).withName(R.string.favorites).withIdentifier(Filter.FAVORITES.ordinal()).withTag(Filter.FAVORITES)
 
                 )
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {

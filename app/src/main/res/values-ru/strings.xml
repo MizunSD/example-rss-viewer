@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="error_news_not_found">Новости не найдены. Пожалуйста, обновите</string>
+    <string name="read_all_news">Все новости прочитаны</string>
+</resources>

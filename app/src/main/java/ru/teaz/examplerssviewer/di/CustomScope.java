@@ -1,8 +1,9 @@
 package ru.teaz.examplerssviewer.di;
 
-/**
- * Created by Teaz on 19.06.2016.
- */
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+
 @javax.inject.Scope
+@Retention(RetentionPolicy.RUNTIME)
 public @interface CustomScope {
 }

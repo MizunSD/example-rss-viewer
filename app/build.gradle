@@ -1,6 +1,17 @@
 apply plugin: 'com.android.application'
 apply plugin: 'com.neenbedankt.android-apt'
 
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        // the latest version of the android-apt plugin
+        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.4'
+    }
+}
+
 android {
     compileSdkVersion 24
     buildToolsVersion "23.0.2"
@@ -8,7 +19,7 @@ android {
     defaultConfig {
         applicationId "ru.teaz.examplerssviewer"
         minSdkVersion 14
-        targetSdkVersion 23
+        targetSdkVersion 24
         versionCode 1
         versionName "1.0"
     }
@@ -21,7 +32,7 @@ android {
 }
 
 ext {
-    retrofitVersion="2.0.0"
+    retrofitVersion="2.1.0"
     daggerVersion="2.0"
     supportVersion="24.0.0"
 }
@@ -44,8 +55,11 @@ dependencies {
         exclude group: 'stax', module: 'stax-api'
         exclude group: 'stax', module: 'stax'
     }
+    compile 'com.squareup.okhttp:okhttp:2.5.0'
+    compile "com.squareup.retrofit2:adapter-rxjava:$retrofitVersion"
 
     compile 'com.j256.ormlite:ormlite-core:4.48'
+    compile 'com.j256.ormlite:ormlite-android:4.48'
     compile 'joda-time:joda-time:2.9.4'
 
     // ButterKnife

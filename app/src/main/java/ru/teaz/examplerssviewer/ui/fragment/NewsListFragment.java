@@ -23,16 +23,13 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 import ru.teaz.examplerssviewer.R;
 import ru.teaz.examplerssviewer.di.component.NewsComponent;
-import ru.teaz.examplerssviewer.model.Filter;
-import ru.teaz.examplerssviewer.model.db.News;
+import ru.teaz.examplerssviewer.data.Filter;
+import ru.teaz.examplerssviewer.data.db.model.News;
 import ru.teaz.examplerssviewer.presenter.impl.NewsListFragmentPresenterImpl;
 import ru.teaz.examplerssviewer.ui.adapter.NewsListRecyclerViewAdapter;
 import ru.teaz.examplerssviewer.ui.callback.NewsListFragmentView;
 import ru.teaz.examplerssviewer.ui.view.NestedScrollableSwipeRefreshLayout;
 
-/**
- * Created by Teaz on 19.06.2016.
- */
 public class NewsListFragment extends BaseFragment implements NewsListFragmentView, NewsListRecyclerViewAdapter.OnNewsClickListener {
 
     private static final String ARG_FILTER_TYPE = "arg_filter_type";
@@ -65,7 +62,7 @@ public class NewsListFragment extends BaseFragment implements NewsListFragmentVi
     }
 
     public NewsListFragment() {
-        // Required empty public constructor
+
     }
 
     public interface Callbacks {
@@ -95,7 +92,6 @@ public class NewsListFragment extends BaseFragment implements NewsListFragmentVi
     @Override
     public void onDetach() {
         super.onDetach();
-        // prevent memory leaks
         mCallback = null;
     }
 
@@ -103,7 +99,7 @@ public class NewsListFragment extends BaseFragment implements NewsListFragmentVi
     public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getComponent(NewsComponent.class).inject(this);
-        presenter.bindDisplay(this);
+        presenter.bindView(this);
         if (savedInstanceState == null) {
             final Bundle args = getArguments();
             if (args != null) {
@@ -125,7 +121,6 @@ public class NewsListFragment extends BaseFragment implements NewsListFragmentVi
         final View view = inflater.inflate(R.layout.fragment_news_list, container, false);
         ButterKnife.inject(this, view);
 
-        // Init refreshLayout
         refreshLayout.setCanChildScrollUpCallback(new NestedScrollableSwipeRefreshLayout.CanChildScrollUpCallback() {
             @Override
             public boolean canSwipeRefreshChildScrollUp() {
@@ -141,7 +136,6 @@ public class NewsListFragment extends BaseFragment implements NewsListFragmentVi
 
         presenter.loadNewsList(mFilter);
 
-        // Init RecyclerView
         mAdapter = new NewsListRecyclerViewAdapter(getActivity());
         mAdapter.setOnNewsClickListener(this);
         rvNewsList.setHasFixedSize(true);
@@ -159,6 +153,12 @@ public class NewsListFragment extends BaseFragment implements NewsListFragmentVi
     @Override
     public void showMessage(@StringRes int mesText) {
         Snackbar.make(coordinatorLayout, mesText, Snackbar.LENGTH_LONG)
+                .show();
+    }
+
+    @Override
+    public void showError(String errMessage) {
+        Snackbar.make(coordinatorLayout, errMessage, Snackbar.LENGTH_LONG)
                 .show();
     }
 

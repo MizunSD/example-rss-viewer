@@ -5,9 +5,6 @@ import android.support.v4.app.Fragment;
 
 import ru.teaz.examplerssviewer.di.HasComponent;
 
-/**
- * Created by Teaz on 25.06.2016.
- */
 public abstract class BaseFragment extends Fragment {
 
     @Override

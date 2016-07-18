@@ -5,16 +5,14 @@ import android.support.annotation.StringRes;
 
 import java.util.List;
 
-import ru.teaz.examplerssviewer.model.db.News;
+import ru.teaz.examplerssviewer.data.db.model.News;
 
-/**
- * Created by Teaz on 25.06.2016.
- */
 public interface NewsListFragmentView {
 
     void showProgress();
     void hideProgress();
     void showMessage(@StringRes int msgId);
+    void showError(String errMessage);
 
     void updateContent(@NonNull List<News> newsList);
     void markAllRead();

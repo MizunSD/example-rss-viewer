@@ -23,13 +23,10 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 import ru.teaz.examplerssviewer.R;
 import ru.teaz.examplerssviewer.di.component.NewsComponent;
-import ru.teaz.examplerssviewer.model.db.News;
+import ru.teaz.examplerssviewer.data.db.model.News;
 import ru.teaz.examplerssviewer.presenter.impl.NewsItemFragmentPresenterImpl;
 import ru.teaz.examplerssviewer.ui.callback.NewsItemFragmentView;
 
-/**
- * Created by Teaz on 19.06.2016.
- */
 public class NewsItemFragment extends BaseFragment implements NewsItemFragmentView {
 
     private static final String ARG_NEWS = "arg_news";
@@ -73,7 +70,7 @@ public class NewsItemFragment extends BaseFragment implements NewsItemFragmentVi
     public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getComponent(NewsComponent.class).inject(this);
-        presenter.bindDisplay(this);
+        presenter.bindView(this);
         if (savedInstanceState == null) {
             final Bundle args = getArguments();
             if (args != null) {

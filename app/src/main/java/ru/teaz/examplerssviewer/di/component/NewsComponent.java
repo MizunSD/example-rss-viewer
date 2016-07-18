@@ -7,9 +7,6 @@ import ru.teaz.examplerssviewer.di.module.NewsModule;
 import ru.teaz.examplerssviewer.ui.fragment.NewsItemFragment;
 import ru.teaz.examplerssviewer.ui.fragment.NewsListFragment;
 
-/**
- * Created by Teaz on 19.06.2016.
- */
 @CustomScope
 @Component(dependencies = AppComponent.class, modules = {ActivityModule.class, NewsModule.class})
 public interface NewsComponent {

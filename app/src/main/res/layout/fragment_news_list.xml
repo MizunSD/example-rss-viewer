@@ -21,8 +21,6 @@
                 android:id="@+id/pb_wheel"
                 android:layout_width="@dimen/progress_wheel_width"
                 android:layout_height="@dimen/progress_wheel_height"
-                android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true"
                 android:layout_gravity="center"
                 app:matProg_barColor="@color/colorAccent"
                 app:matProg_progressIndeterminate="true"/>

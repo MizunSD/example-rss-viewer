@@ -1,8 +1,5 @@
 package ru.teaz.examplerssviewer.domain.bus;
 
-/**
- * Created by Teaz on 25.06.2016.
- */
 import javax.inject.Inject;
 
 import rx.Subscription;
@@ -20,7 +17,7 @@ public class RxBus {
     @Inject
     public RxBus() {}
 
-    public <T extends Object> Subscription register(final Class<T> eventType, Action1<T> onNext) {
+    public <T> Subscription register(final Class<T> eventType, Action1<T> onNext) {
         return mBus
                 .observeOn(AndroidSchedulers.mainThread())
                 .filter(new Func1<Object, Boolean>() {
